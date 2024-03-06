@@ -98,6 +98,41 @@ const transpose = (reels) => {
   return rows;
 };
 
+const printRows = (rows) => {
+  for (const row of rows) {
+    let rowString = "";
+    for (const [i, symbol] of row.entries()) {
+      rowString += symbol;
+      if (i != row.length - 1) {
+        rowString += " | ";
+      }
+    }
+    console.log(rowString);
+  }
+};
+
+const getWinnings = (rows, bet, lines) => {
+  let winnings = 0;
+
+  for (let row = 0; row < lines; row++) {
+    const symbols = rows[row];
+    let allSame = true;
+
+    for (const symbol of symbols) {
+      if (symbol != symbols[0]) {
+        allSame = false;
+        break;
+      }
+    }
+
+    if (allSame) {
+      winnings += bet * SYMBOL_VALUES[symbols[0]];
+    }
+  }
+
+  return winnings;
+};
+
 const reels = spin();
 console.log(reels);
 
@@ -108,4 +143,6 @@ const numberOfLines = getNumberOfLines();
 console.log("your betting line : " + numberOfLines);
 const numberBet = getBet(balance, numberOfLines);
 const rows = transpose(reels);
-console.log(rows);
+printRows(rows);
+const winnings = getWinnings(rows, numberBet, numberOfLines);
+console.log("You Win $" + winnings.toString());
